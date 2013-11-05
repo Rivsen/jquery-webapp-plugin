@@ -50,7 +50,7 @@
         // bind custom event here
         // you can do this in any where
         //
-        events.run.apply( self, ['onExample'] );;
+        events.run.apply( self, ['onExample'] );
       });
 
     }
