@@ -5,6 +5,9 @@
     }
   };
 
+  // define current app container
+  var app = null;
+
   var apps = {
 
     // common init function
@@ -13,13 +16,15 @@
     commonInit : function( opts ) {
       var self = this;
 
+      // extends default settings
+      //
       settings.common = $.extend( settings.common, {} );
       settings = $.extend( settings, opts );
 
       // run dynamic bind events for broswer events
       //
-      $(window).resize( function(){ libs.onResize.run.apply( self, {} ); } );
-      $(document).ready( function(){ libs.onDocumentReady.run.apply( self, {} ); } );
+      $(document).ready( function(){ events.run.apply( self, ['onDocumentReady'] ); } );
+      $(window).resize( function(){ events.run.apply( self, ['onResize'] ); } );
 
       return this;
     },
@@ -29,12 +34,23 @@
     //
     exampleInit : function( opts ) {
 
+      // extends default settings
+      //
       settings.example = $.extend( settings.example, {} );
       settings = $.extend( settings, opts );
+
+      // define global app obj is current app container
+      //
+      app = this;
 
       return this.each(function() {
         var self = this;
         // ...
+
+        // bind custom event here
+        // you can do this in any where
+        //
+        events.run.apply( self, ['onExample'] );;
       });
 
     }
@@ -52,6 +68,13 @@
       var img = new Image();
       img.src = this.src;
       return [img.width, img.height];
+    },
+
+    // example lib, just print a message in js console
+    //
+    exampleLib : function( opts ) {
+      console.log( this );
+      return true;
     }
   };
 
@@ -59,18 +82,24 @@
   //
   var events = {
 
+    // run a event
+    //
+    run : function( evt ) {
+      if( events[evt] ) {
+        for( i in events[evt] ) {
+          if( typeof events[evt].callbackList[i] === 'function' ) {
+            events[evt].callbackList[i].apply( this, {} );
+            console.log(events[evt].title + ' event run ' + i);
+          }
+        }
+      }
+    },
+
     // call this function when window resize
     // 'this' is app container
     //
     onResize : {
-      run : function() {
-        for( i in libs.onResize.callbackList ) {
-          if( typeof libs.onResize.callbackList[i] === 'function' ) {
-            libs.onResize.callbackList[i].apply( this, {} );
-            console.log('Resize event run ' + i);
-          }
-        }
-      },
+      title : 'Window Resize',
       callbackList : {}
     },
 
@@ -78,15 +107,18 @@
     // 'this' is app container
     //
     onDocumentReady : {
-      run : function() {
-        for( i in libs.onDocumentReady.callbackList ) {
-          if( typeof libs.onDocumentReady.callbackList[i] === 'function' ) {
-            libs.onDocumentReady.callbackList[i].apply( this, {} );
-            console.log('Document ready event run ' + i);
-          }
-        }
-      },
+      title : 'Document Ready',
       callbackList : {}
+    },
+
+    // on example event
+    // 'this' is app container
+    //
+    onExample : {
+      title : 'Example',
+      callbackList : {
+        example : libs.exampleLib.apply( app, [{}] );
+      }
     }
 
   };
