@@ -86,9 +86,9 @@
     //
     run : function( evt ) {
       if( events[evt] ) {
-        for( i in events[evt] ) {
+        for( i in events[evt].callbackList ) {
           if( typeof events[evt].callbackList[i] === 'function' ) {
-            events[evt].callbackList[i].apply( this, {} );
+            events[evt].callbackList[i].apply( this, [{}] );
             console.log(events[evt].title + ' event run ' + i);
           }
         }
