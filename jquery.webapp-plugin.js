@@ -5,27 +5,34 @@
     }
   };
 
-  // define current app container
+  /*
+   * define current app container
+   */
   var app = null;
 
   var apps = {
 
-    // common init function
-    // 'this' is app container
-    //
+    /*
+     * common init function
+     * 'this' is app container
+     */
     commonInit : function( opts ) {
       var self = app = this;
 
-      // extends default settings
-      //
+      /*
+       * extends default settings
+       */
       settings.common = $.extend( settings.common, {} );
       settings = $.extend( settings, opts );
 
-      // run dynamic bind events for broswer events
-      //
+      /*
+       * run dynamic bind events for broswer events
+       */
       $(document).ready( function(evt){
 
-        // get custom onready events
+        /*
+         * get custom onready events
+         */
         var onready = $._data( $(app).get(0), 'events' );
         if( undefined !== onready && undefined !== onready.onready ) {
           $(app).trigger('onready');
@@ -35,7 +42,9 @@
 
       $(window).resize( function(evt){
 
-        // get custom onresize events
+        /*
+         * get custom onresize events
+         */
         var onresize = $._data( $(app).get(0), 'events' );
         if( undefined !== onresize && undefined !== onresize.onresize ) {
           $(app).trigger('onresize');
@@ -46,38 +55,49 @@
       return app;
     },
 
-    // homepage init function
-    // 'this' is app container
-    //
+    /*
+     * homepage init function
+     * 'this' is app container
+     */
     homepageInit : function( opts ) {
 
-      // extends default settings
-      //
+      /*
+       * extends default settings
+       */
       settings.homepage = $.extend( settings.homepage, {} );
       settings = $.extend( settings, opts );
 
-      // define global app obj is current app container
-      //
+      /*
+       * define global app obj is current app container
+       */
       app = this;
 
-      // if selector get more than one dom nodes, here will run multi times
+      /*
+       * if selector get more than one dom nodes, here will run multi times
+       */
       return this.each(function() {
         var self = this;
-        $(this).on('onready', function(evt){ console.log(this, evt); });
+        $(this).on('onready', function(evt){
+          console.log(this, evt);
+          $(this).find('#pagetitle').html('page already loaded!');
+        });
       });
 
     }
 
   };
 
-  // some common functions
+  /*
+   * some common functions
+   */
   var libs = {
 
-    // get image's real size
-    // 'this' is a img DOM object
-    // return array()
-    // [ width, height ] px
-    //
+    /*
+     * get image's real size
+     * 'this' is a img DOM object
+     * return array()
+     * [ width, height ] px
+     */
     imgRealSize : function( opts ) {
       var img = new Image();
       img.src = this.src;
@@ -85,8 +105,9 @@
     }
   };
 
-  // define jquery plugin
-  //
+  /*
+   * define jquery plugin
+   */
   $.fn.webapp = function( opts ) {
     if( typeof opts == 'string' && apps[opts+'Init'] ) {
       apps.commonInit.apply( this, Array.prototype.slice.call(arguments, 1) );
