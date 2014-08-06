@@ -1,3 +1,12 @@
+/*
+ * A jQuery plugin for bundle webpage's js code
+ *
+ * @author Rivsen
+ *
+ * @link https://github.com/Rivsen/jquery-webapp-plugin/blob/master/jquery.webapp-plugin.js
+ *
+ */
+
 (function($) {
 
   var settings = {
