@@ -119,8 +119,12 @@
    */
   $.fn.webapp = function( opts ) {
     if( typeof opts == 'string' && apps[opts+'Init'] ) {
-      apps.commonInit.apply( this, Array.prototype.slice.call(arguments, 1) );
-      return apps[opts+'Init'].apply( this, Array.prototype.slice.call(arguments, 1) );
+      var app = apps.commonInit.apply( this, Array.prototype.slice.call(arguments, 1) );
+      if( opts == 'common' ) {
+        return app;
+      } else {
+        return apps[opts+'Init'].apply( this, Array.prototype.slice.call(arguments, 1) );
+      }
     } else if ( typeof opts === 'object' || !opts ) {
       return apps.commonInit.apply( this, Array.prototype.slice.call(arguments, 0) );
     } else {
